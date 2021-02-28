@@ -1,0 +1,8 @@
+## Interface: 90002
+## Title: SpellLib
+## Author: Xerokz
+## Notes: Library for Class and Specilization Spells
+## DefaultState: enabled
+## Version: 1.0
+
+SpellLib.lua
