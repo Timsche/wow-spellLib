@@ -390,7 +390,7 @@ function SpellLib:New()
                 { name = "Tranquilizing Shot", id = 343244, passive = 0, rank = 2 },
         		{ name = "Wing Clip", id = 195645, passive = 0, rank = 1 },
         	},
-        	BEASTMASTER = {
+        	BEASTMASTERY = {
         		{ name = "Aspect of the Wild", id = 193530, passive = 0, rank = 1 },
         		{ name = "Barbed Shot", id = 217200, passive = 0, rank = 1 },
         		{ name = "Beast Cleave", id = 115939, passive = 0, rank = 1 },
