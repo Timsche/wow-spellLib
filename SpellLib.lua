@@ -2092,6 +2092,7 @@ function SpellLib:New()
         		{ name = "Fresh Meat", id = 215568},
         		{ name = "Double Time", id = 103827},
         		{ name = "Impending Victory", id = 202168},
+                { name = "Storm Bolt", id = 107570},
         		{ name = "Massacre", id = 206315},
         		{ name = "Frenzy", id = 335077},
         		{ name = "Onslaught", id = 315720},
