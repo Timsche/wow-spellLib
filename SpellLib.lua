@@ -1,4 +1,4 @@
-local SPELLLIB_MAJOR, SPELLLIB_MINOR = "SpellLib-1.0", 1
+local SPELLLIB_MAJOR, SPELLLIB_MINOR = "SpellLib-1.02", 1
 local SpellLib = LibStub:NewLibrary(SPELLLIB_MAJOR, SPELLLIB_MINOR)
 
 SpellLib.errorText = "|cffff0000ERROR:|"
