@@ -15,8 +15,8 @@ self.classSpells = {
   MAGE = {
     BASIC = {...},
     ARCANE = {
-      { name = "Alter Time", id = 342245, passive = 0, rank = 1 },
-      { name = "Arcane Barrage", id = 44425, passive = 0, rank = 1 },
+      { name = "Alter Time", id = 342245, passive = 0, rank = 1, requiresAura = false, requiredAuraID = nil },
+      { name = "Arcane Barrage", id = 44425, passive = 0, rank = 1, requiresAura = false, requiredAuraID = nil },
       ...
     },
     FIRE = {...},
@@ -31,7 +31,7 @@ self.classSpells = {
 Since I am using Ace3.0 and LibStub for my Addons I am only showing how to setup the library with these two.
 ```
 function ciAddon:OnInitialize()
-  self.spellLib = LibStub("SpellLib-1.0"):New()
+  self.spellLib = LibStub("SpellLib-1.03"):New()
   ...
 end
 ```
@@ -39,17 +39,16 @@ end
 From that point on the library and data can be accessed by calling **self.spellLib**.
 
 ## Accessing spell data directly (not recommended)
-*It is highly recommended to use the provided functions below to get the data.*
-The basis for this library is a simple lua table. It contains the name, id, passive and rank for each spell. The spells are sorted for each class and their specilizations, e.g. the spelldata for mages is stored like this:
-
+**It is highly recommended to use the provided functions below to get the data.**
+The basis for this library is are three simple lua table. The first one is called **self.classSpells** and contains the name(string), id(integer), passiv (boolean), requiresAura(boolean), requiredAuraID(nil or integer) and rank(integer) for each spell. The spells are sorted for each class and their specilizations, e.g. the spelldata for mages is stored like this:
 ```
 self.classSpells = {
   ...
   MAGE = {
     BASIC = {...},
     ARCANE = {
-      { name = "Alter Time", id = 342245, passive = 0, rank = 1 },
-      { name = "Arcane Barrage", id = 44425, passive = 0, rank = 1 },
+      { name = "Alter Time", id = 342245, passive = 0, rank = 1, requiresAura = false, requiredAuraID = nil },
+      { name = "Arcane Barrage", id = 44425, passive = 0, rank = 1, requiresAura = false, requiredAuraID = nil },
       ...
     },
     FIRE = {...},
@@ -59,6 +58,45 @@ self.classSpells = {
   ...
 };
 ```
+
+The second one is called **self.talents** and contains name(string), id(integer), requiresAura(boolean), requiredAuraID(nil or integer), passive(boolean), isReplacement(boolean), replacesSpell(nil or integer) for each talent.
+```
+self.talents = {
+  ...
+  MAGE = {
+    BASIC = {...},
+    ARCANE = {
+      { name = "Amplification", id = 236628, requiresAura = false, requiredAuraID = nil, passive = true, isReplacement = false, replacesSpell = nil },
+      { name = "Rule of Threes", id = 264354, requiresAura = false, requiredAuraID = nil, passive = true, isReplacement = false, replacesSpell = nil },
+      ...
+    },
+    FIRE = {...},
+    FROST = {...}
+  },
+  ...
+};
+```
+
+The third table is called **self.pvp_talents** and contains name(string), id(integer), requiresAura(boolean), requiredAuraID(nil or integer), passive(boolean), isReplacement(boolean), replacesSpell(nil or integer) for each pvp talent.
+```
+self.pvp_talents = {
+  ...
+  MAGE = {
+    ARCANE = {
+      { name = "Arcane Empowerment", id = 276741, requiresAura = false, requiredAuraID = nil, passive = true, isReplacement = false, replacesSpell = nil },
+      { name = "Dampened Magic", id = 236788, requiresAura = false, requiredAuraID = nil, passive = true, isReplacement = false, replacesSpell = nil },
+      ...
+    },
+    FIRE = {...},
+    FROST = {...}
+  },
+  ...
+};
+```
+
+
+
+
 ### Getting specilization data
 This statement gets you all data for frost mages:
 ```
