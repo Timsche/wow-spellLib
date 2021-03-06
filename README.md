@@ -7,8 +7,21 @@ When I came back to WoW (stopped playing during with WotLK) I noticed rather qui
 # Usage
 The library contains different tables with all spells, talents and pvp-talents for each class and it's specilizations. It's is basically a lookup for spells and their IDs for each class and specilization.
 
+## Initializing the library with LibStub and Ace3.0
+Since I am using Ace3.0 and LibStub for my Addons I am only showing how to setup the library with these two.
+```
+function myAddon:OnInitialize()
+  self.spellLib = LibStub("SpellLib-1.03"):New()
+  ...
+end
+```
+
+From that point on the library and data can be accessed by calling **self.spellLib**.
+
 ## Explaining the table structure
-All three tables (self.classSpells, self.talents, self.talents) are build the same way. The code below shows an excerpt from **classSpells**. You can see that that the first layer is indexed with the classnames in all caps (DEATHKNIGHT, DEMONHUNTER...). Everyone of those contains another table with the indexes "BASIC", "COVENANT" and on for every specilization. Inside those are multiple tables containing the spelldata. Every spell is represented with the following four properties: name (Name of the spell), id (Unique ID of the spell), passive (boolean indicating if the spell is a passive) and rank (the rank of the spell). The tables **talents** and **pvp_talents** follow the same idea. The only difference ofcourse is that fact that the specilizations are the only indexes on the deeper level.
+The library basically is build on three tables (self.classSpells, self.talents, self.talents). The code below shows an excerpt for each table. You can see that that for each table the first layer is indexed with the classnames in all caps (DEATHKNIGHT, DEMONHUNTER...). Everyone of those contains another table with the indexes for every specilization and the classSpells has another two named "BASIC" and "COVENANT". Inside those are multiple tables containing the spelldata or talent. 
+
+Every spell is represented with the following four properties: name (Name of the spell), id (Unique ID of the spell), passive (boolean indicating if the spell is a passive), requiresAura (boolean indicating if any aura is need to cast the spell), requiredAuraID (nil or ID of the aura that needs to be active) and rank (the rank of the spell).
 ```
 self.classSpells = {
   ...
@@ -27,16 +40,42 @@ self.classSpells = {
 };
 ```
 
-## Initializing the library with LibStub and Ace3.0
-Since I am using Ace3.0 and LibStub for my Addons I am only showing how to setup the library with these two.
+The tables **talents** and **pvp_talents** only includes data for the classes specilizations. So the field "BASIC" and "COVENANT" do not exists in these tables. Also there is no need for a spellrank. But there are two extra fields for each talent indicating that the talent replaces one of the character's spells. Those fields are called isReplacement (boolean indicating the talent replaces a spell) and replacesSpell (nil or ID of the spell that will be replaced).
+
+The second one is called **self.talents** and contains name(string), id(integer), requiresAura(boolean), requiredAuraID(nil or integer), passive(boolean), isReplacement(boolean), replacesSpell(nil or integer) for each talent.
 ```
-function ciAddon:OnInitialize()
-  self.spellLib = LibStub("SpellLib-1.03"):New()
+self.talents = {
   ...
-end
+  MAGE = {
+    BASIC = {...},
+    ARCANE = {
+      { name = "Amplification", id = 236628, requiresAura = false, requiredAuraID = nil, passive = true, isReplacement = false, replacesSpell = nil },
+      { name = "Rule of Threes", id = 264354, requiresAura = false, requiredAuraID = nil, passive = true, isReplacement = false, replacesSpell = nil },
+      ...
+    },
+    FIRE = {...},
+    FROST = {...}
+  },
+  ...
+};
 ```
 
-From that point on the library and data can be accessed by calling **self.spellLib**.
+The third table is called **self.pvp_talents** and contains name(string), id(integer), requiresAura(boolean), requiredAuraID(nil or integer), passive(boolean), isReplacement(boolean), replacesSpell(nil or integer) for each pvp talent.
+```
+self.pvp_talents = {
+  ...
+  MAGE = {
+    ARCANE = {
+      { name = "Arcane Empowerment", id = 276741, requiresAura = false, requiredAuraID = nil, passive = true, isReplacement = false, replacesSpell = nil },
+      { name = "Dampened Magic", id = 236788, requiresAura = false, requiredAuraID = nil, passive = true, isReplacement = false, replacesSpell = nil },
+      ...
+    },
+    FIRE = {...},
+    FROST = {...}
+  },
+  ...
+};
+```
 
 ## Accessing spell data directly (not recommended)
 **It is highly recommended to use the provided functions below to get the data.**
@@ -58,7 +97,6 @@ self.classSpells = {
   ...
 };
 ```
-
 The second one is called **self.talents** and contains name(string), id(integer), requiresAura(boolean), requiredAuraID(nil or integer), passive(boolean), isReplacement(boolean), replacesSpell(nil or integer) for each talent.
 ```
 self.talents = {
